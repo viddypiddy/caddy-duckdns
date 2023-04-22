@@ -3,7 +3,7 @@ package duckdns
 import (
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
-	"github.com/viddypiddy/libdns-duckdns"
+	"github.com/viddypiddy/libdns-duckdns@v1.0.0"
 )
 
 // Provider wraps the provider implementation as a Caddy module.
