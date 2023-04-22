@@ -27,6 +27,7 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 	repl := caddy.NewReplacer()
 	p.Provider.APIToken = repl.ReplaceAll(p.Provider.APIToken, "")
 	p.Provider.OverrideDomain = repl.ReplaceAll(p.Provider.OverrideDomain, "")
+	p.Provider.ServerURL = repl.ReplaceAll(p.Provider.ServerURL, "")
 	return nil
 }
 
@@ -35,6 +36,7 @@ func (p *Provider) Provision(ctx caddy.Context) error {
 // duckdns [<api_token>] {
 //     api_token <api_token>
 //     override_domain <duckdns_domain>
+//     server_url <server_url>
 // }
 //
 func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
@@ -69,6 +71,17 @@ func (p *Provider) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
 				if d.NextArg() {
 					return d.ArgErr()
 				}
+			case "server_url":
+				if !d.NextArg() {
+					return d.ArgErr()
+				}
+				if p.Provider.ServerURL != "" {
+					return d.Err("Server URL already set")
+				}
+				p.Provider.ServerURL = d.Val()
+				if d.NextArg() {
+					return d.ArgErr()
+				}				
 			default:
 				return d.Errf("unrecognized subdirective '%s'", d.Val())
 			}
